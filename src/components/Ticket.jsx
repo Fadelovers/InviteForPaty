@@ -40,6 +40,7 @@ export default function Ticket({ answers, name }) {
               <span className="t-val">{passenger}</span>
             </div>
           </div>
+          <p className="t-fate">Судьба: <b>{answers[3].fate}</b>. Судьба не обсуждается с проводником.</p>
           <p className="t-note">
             Действителен только в ночь полной луны. Возврату не подлежит.<br />
             Вагон № 3 · пересадки: <em>лес</em> · <em>старый город</em> · <em>лестница Прехевиля</em>.
