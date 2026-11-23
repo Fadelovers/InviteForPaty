@@ -108,19 +108,27 @@ export default function Registration({ name, onName, answers, onChoose, stamped,
 
   async function sendResult() {
     setSendStatus('sending')
+    const payload = JSON.stringify({
+      username: 'Регистратура Термины',
+      content: '**Новая анкета кандидата**\n```\n' + buildResultText() + '\n```',
+    })
     try {
       const res = await fetch(DISCORD_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: 'Регистратура Термины',
-          content: '**Новая анкета кандидата**\n```\n' + buildResultText() + '\n```',
-        }),
+        body: payload,
       })
       if (!res.ok) throw new Error(String(res.status))
       setSendStatus('sent')
     } catch {
-      setSendStatus('error')
+      try {
+        const form = new FormData()
+        form.append('payload_json', payload)
+        await fetch(DISCORD_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: form })
+        setSendStatus('sent')
+      } catch {
+        setSendStatus('error')
+      }
     }
   }
 
